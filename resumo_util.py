@@ -207,10 +207,26 @@ from fpdf import FPDF
 def criar_pdf(titulo, veiculo, conteudo, caminho):
     pdf = FPDF()
     pdf.add_page()
-    pdf.add_font('DejaVu', '', fname='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', uni=True)
-    pdf.set_font("DejaVu", size=12)
-    pdf.set_text_color(0)
-    pdf.multi_cell(0, 10, f"{titulo}\n{veiculo}\n\n{conteudo}")
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # Fonte padrão Helvetica
+    pdf.set_font("Helvetica", "B", 14)
+    pdf.cell(0, 10, titulo, ln=True, align="L")
+
+    pdf.ln(4)
+    pdf.set_font("Helvetica", "", 11)
+    pdf.set_text_color(100, 100, 100)
+    pdf.cell(0, 8, f"Fonte: {veiculo}", ln=True)
+
+    pdf.ln(6)
+    pdf.set_text_color(0, 0, 0)
+
+    # Quebrar o texto do conteúdo
+    pdf.set_font("Helvetica", "", 11)
+    for linha in conteudo.split("\n"):
+        pdf.multi_cell(0, 6, linha.strip(), align="J")
+        pdf.ln(1)
+
     pdf.output(caminho)
 
 def salvar_noticias_valor_pdf(noticias_valor):
