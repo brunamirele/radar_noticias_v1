@@ -195,6 +195,7 @@ def extrair_valor_economico(noticias_dict):
     return noticias_valor
 
 # === Funções para gerar PDFd
+from fpdf import FPDF
 def criar_pdf(titulo, veiculo, corpo, caminho):
     pdf = FPDF()
     pdf.add_page()
