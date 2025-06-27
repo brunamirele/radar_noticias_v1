@@ -209,20 +209,21 @@ def criar_pdf(titulo, veiculo, conteudo, caminho):
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
 
-    # Fonte padrão Helvetica
+    # Título em negrito
     pdf.set_font("Helvetica", "B", 14)
-    pdf.cell(0, 10, titulo, ln=True, align="L")
+    pdf.multi_cell(0, 10, titulo)
 
+    # Veículo
     pdf.ln(4)
-    pdf.set_font("Helvetica", "", 11)
+    pdf.set_font("Helvetica", "", 10)
     pdf.set_text_color(100, 100, 100)
     pdf.cell(0, 8, f"Fonte: {veiculo}", ln=True)
 
+    # Conteúdo (normal)
     pdf.ln(6)
     pdf.set_text_color(0, 0, 0)
-
-    # Quebrar o texto do conteúdo
     pdf.set_font("Helvetica", "", 11)
+
     for linha in conteudo.split("\n"):
         pdf.multi_cell(0, 6, linha.strip(), align="J")
         pdf.ln(1)
