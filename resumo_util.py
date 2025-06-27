@@ -177,6 +177,12 @@ def exportar_resumos_para_word(noticias_dict, resumos_dict, caminho_saida='resum
         p = doc.add_paragraph(resumo)
         p.style.font.size = Pt(11)
 
+        # Aviso se for do Valor Econômico
+        if veiculo.startswith("Valor Economico"):
+            aviso = doc.add_paragraph("Notícia anexa ao e-mail")
+            aviso.style.font.size = Pt(10)
+            aviso.runs[0].italic = True
+
     doc.save(caminho_saida)
     print(f"\nArquivo Word exportado com sucesso para: {os.path.abspath(caminho_saida)}")
 
