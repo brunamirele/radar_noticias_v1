@@ -203,30 +203,37 @@ def extrair_valor_economico(noticias_dict):
 
 # === Funções para gerar PDFd
 from fpdf import FPDF
+'''
+def criar_pdf(titulo, veiculo, conteudo, caminho):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.add_font('DejaVu', '', fname='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', uni=True)
+    pdf.set_font("DejaVu", size=12)
+    pdf.set_text_color(0)
+    pdf.multi_cell(0, 10, f"{titulo}\n{veiculo}\n\n{conteudo}")
+    pdf.output(caminho)
+'''
 
 def criar_pdf(titulo, veiculo, conteudo, caminho):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # Adiciona fonte normal (unicode)
+    pdf.add_font('DejaVu', '', fname='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', uni=True)
+    # Adiciona fonte em negrito (unicode)
+    pdf.add_font('DejaVu', 'B', fname='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', uni=True)
 
     # Título em negrito
-    pdf.set_font("Helvetica", "B", 14)
+    pdf.set_font("DejaVu", 'B', 12)
     pdf.multi_cell(0, 10, titulo)
 
-    # Veículo
-    pdf.ln(4)
-    pdf.set_font("Helvetica", "", 10)
-    pdf.set_text_color(100, 100, 100)
-    pdf.cell(0, 8, f"Fonte: {veiculo}", ln=True)
+    pdf.ln(4)  # Espaço extra
 
-    # Conteúdo (normal)
-    pdf.ln(6)
-    pdf.set_text_color(0, 0, 0)
-    pdf.set_font("Helvetica", "", 11)
-
-    for linha in conteudo.split("\n"):
-        pdf.multi_cell(0, 6, linha.strip(), align="J")
-        pdf.ln(1)
+    # Veículo e conteúdo em regular
+    pdf.set_font("DejaVu", '', 12)
+    pdf.multi_cell(0, 8, veiculo)
+    pdf.ln(2)
+    pdf.multi_cell(0, 8, conteudo)
 
     pdf.output(caminho)
 
