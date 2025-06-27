@@ -5,6 +5,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 import requests
+import zipfile
 
 # === 1. Funções para converter e extrair notícias ===
 def extrair_noticias_heading1(caminho_docx):
@@ -196,19 +197,15 @@ def extrair_valor_economico(noticias_dict):
 
 # === Funções para gerar PDFd
 from fpdf import FPDF
-import os
 
 def criar_pdf(titulo, veiculo, conteudo, caminho):
     pdf = FPDF()
     pdf.add_page()
     pdf.add_font('DejaVu', '', fname='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', uni=True)
     pdf.set_font("DejaVu", size=12)
-
     pdf.set_text_color(0)
     pdf.multi_cell(0, 10, f"{titulo}\n{veiculo}\n\n{conteudo}")
-    
     pdf.output(caminho)
-
 
 def salvar_noticias_valor_pdf(noticias_valor):
     arquivos = []
