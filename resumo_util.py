@@ -196,17 +196,19 @@ def extrair_valor_economico(noticias_dict):
 
 # === Funções para gerar PDFd
 from fpdf import FPDF
-def criar_pdf(titulo, veiculo, corpo, caminho):
+import os
+
+def criar_pdf(titulo, veiculo, conteudo, caminho):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", style='B', size=14)
-    pdf.multi_cell(0, 10, titulo)
-    pdf.set_font("Arial", size=12)
-    pdf.ln()
-    pdf.cell(0, 10, veiculo, ln=True)
-    pdf.ln()
-    pdf.multi_cell(0, 10, corpo)
+    pdf.add_font('DejaVu', '', fname='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', uni=True)
+    pdf.set_font("DejaVu", size=12)
+
+    pdf.set_text_color(0)
+    pdf.multi_cell(0, 10, f"{titulo}\n{veiculo}\n\n{conteudo}")
+    
     pdf.output(caminho)
+
 
 def salvar_noticias_valor_pdf(noticias_valor):
     arquivos = []
