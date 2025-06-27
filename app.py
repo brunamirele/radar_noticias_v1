@@ -1,6 +1,9 @@
 import streamlit as st
 import tempfile
 from resumo_util import processar_arquivo, resumir_noticias, exportar_resumos_para_word
+import os
+import zipfile
+from fpdf import FPDF
 
 st.set_page_config(page_title="Resumos de Notícias", layout="centered")
 
