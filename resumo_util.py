@@ -179,6 +179,54 @@ def exportar_resumos_para_word(noticias_dict, resumos_dict, caminho_saida='resum
     doc.save(caminho_saida)
     print(f"\nArquivo Word exportado com sucesso para: {os.path.abspath(caminho_saida)}")
 
+# === Função para identificar notícias do Valor Econômico
+def extrair_valor_economico(noticias_dict):
+    noticias_valor = {}
+    for key, conteudo in noticias_dict.items():
+        linhas = conteudo.split('\n')
+        if len(linhas) >= 3:
+            veiculo = linhas[2].strip()
+            if veiculo.startswith("Valor Economico"):
+                noticias_valor[key] = {
+                    "titulo": linhas[0].strip(),
+                    "veiculo": veiculo,
+                    "conteudo": '\n'.join(linhas[3:]).strip()
+                }
+    return noticias_valor
+
+# === Funções para gerar PDFd
+def criar_pdf(titulo, veiculo, corpo, caminho):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", style='B', size=14)
+    pdf.multi_cell(0, 10, titulo)
+    pdf.set_font("Arial", size=12)
+    pdf.ln()
+    pdf.cell(0, 10, veiculo, ln=True)
+    pdf.ln()
+    pdf.multi_cell(0, 10, corpo)
+    pdf.output(caminho)
+
+def salvar_noticias_valor_pdf(noticias_valor):
+    arquivos = []
+    pasta_saida = "pdfs_valor"
+    os.makedirs(pasta_saida, exist_ok=True)
+
+    for i, (key, info) in enumerate(noticias_valor.items(), 1):
+        nome = f"{i:02d}_{info['titulo'][:40].replace(' ', '_')}.pdf"
+        caminho = os.path.join(pasta_saida, nome)
+        criar_pdf(info['titulo'], info['veiculo'], info['conteudo'], caminho)
+        arquivos.append(caminho)
+
+    return arquivos
+
+# === Função para zip dos PDFs (se necessário)
+def compactar_em_zip(lista_caminhos, caminho_zip):
+    with zipfile.ZipFile(caminho_zip, 'w') as zipf:
+        for caminho in lista_caminhos:
+            zipf.write(caminho, os.path.basename(caminho))
+    return caminho_zip
+
 # === 4. Executar todo o processo: leitura, resumo e exibição ===
 def resumir_noticias(noticias_dict):
     resumos = {}
